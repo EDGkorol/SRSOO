@@ -95,5 +95,8 @@
         if (!selecteds || !selecteds.length) return;
         box2.addItems(selecteds);
         box1.removeItems(selecteds);
-    }</script>
+    }    function loadStudentInfo() {
+        $.post(            "selectCourse.aspx?Action=LoadStudentInfo",            function (reslut) {
+                var json = $.parseJSON(reslut);                $.ligerui.get("ID").setValue(json.Id);                $.ligerui.get("StudentName").setValue(json.Name);                liger.get("listbox2").setData(json.Attends);
+            }        );    }</script>
 </html>
