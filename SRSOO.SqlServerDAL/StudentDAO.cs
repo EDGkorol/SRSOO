@@ -26,20 +26,18 @@ namespace SRSOO.SqlServerDAL
            var stu = new Student(dr["Name"].ToString(), dr["Id"].ToString(), dr["Major"].ToString())dr["Degree"].ToString());
            dr.Close();
            dr.Dispose();
+           //访问数据库，获取选误信息
            var attends = new List<Section>();
-           attends.Add(new Section(0,"","",null,"",0));
-           stu.Attends = attends;
-           return stu;
-       }
-
-       public void GetPreRequisites(Course course)
-       {
-           string sql = "select * from Prerequisite where CourseNumber='{0}'".FormatWith(course.CourseNumber);
-           DataTable dt = SqlHelper.ExecuteDataset(ConStr, CommandType.Text, sql).Tables[0];
-           for (int i = 0; i < dt.Rows.Count; i++)
+           String sql1=@"select * from AttendSection where StudentName='{0}'".FormatWith(id);
+           DataTable attendSec = SqlHelper.ExecuteDataset(ConStr,CommandType.Text,sql1).Tables[0];
+           var secDao= new SectionDAO();
+           foreach(DataRow r in attendSec.Rows)
            {
-               course.AddPrerequisite(GetCourse(dt.Rows[i]["Prerequisite"].ConvertToString()));
-           }
+           attends.Add(secDao.GetSection(r["SectionNumber"].ConvertToIntBaseZero()));
+           };
+           stu.Attends = attends;
+           //访问数据库把成绩单读出来
+           return stu;
        }
     }
 }

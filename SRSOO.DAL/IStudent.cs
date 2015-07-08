@@ -11,3 +11,8 @@ namespace SRSOO.IDAL
         Student GetStudent(string id);
     }
 }
+public static IStudent CreateStudentDAO()
+{
+    string className = AssemblyName + "." + "StudentDAO",
+    return(IStudent)Assembly.Load(AssemblyName).CreateInstance(className);
+}
